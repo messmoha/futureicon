@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Authorization – FutureIcon Publisher</title>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; background: #0d0b1a; color: #eee; }
+  main { max-width: 680px; margin: 0 auto; padding: 56px 20px; line-height: 1.6; }
+  code { display: block; word-break: break-all; background: #1f1b33; padding: 14px; border-radius: 8px; margin: 12px 0; }
+  button { background: #c77dff; color: #0d0b1a; border: 0; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+  .err { color: #ff8080; }
+</style>
+</head>
+<body>
+<main>
+  <h1>FutureIcon Publisher</h1>
+  <div id="out"></div>
+</main>
+<script>
+  // Shows the authorization code TikTok sends back, so it can be copied into the setup chat.
+  var p = new URLSearchParams(location.search);
+  var out = document.getElementById("out");
+  if (p.get("code")) {
+    var full = location.href;
+    out.innerHTML = "<p>Authorization received. Copy this whole address and paste it into the setup chat:</p>" +
+      "<code id='c'></code><button id='b'>Copy</button>";
+    document.getElementById("c").textContent = full;
+    document.getElementById("b").onclick = function () {
+      navigator.clipboard.writeText(full);
+      this.textContent = "Copied ✓";
+    };
+  } else if (p.get("error")) {
+    out.innerHTML = "<p class='err'>Authorization was not completed:</p><code id='c'></code>";
+    document.getElementById("c").textContent = (p.get("error") || "") + " " + (p.get("error_description") || "");
+  } else {
+    out.innerHTML = "<p>This page receives the TikTok authorization for our own accounts. Nothing to do here.</p>";
+  }
+</script>
+</body>
+</html>
